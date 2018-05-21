@@ -45,12 +45,20 @@ defmodule Ccxtpy do
     for [unix_time_ms, open, high, low, close, volume] <- raw_ohlcvs do
       %{
         timestamp: unix_time_ms |> DateTime.from_unix!(:millisecond) |> DateTime.to_naive(),
-        open: open,
-        high: high,
-        low: low,
-        close: close,
-        base_volume: volume
+        open: parse_float(open),
+        high: parse_float(high),
+        low: parse_float(low),
+        close: parse_float(close),
+        base_volume: parse_float(volume)
       }
     end
   end
+
+  def parse_float(term) when is_binary(term) do
+    {float, _} = Float.parse(term)
+    float
+  end
+
+  def parse_float(term) when is_float(term), do: term
+  def parse_float(term) when is_integer(term), do: term
 end
