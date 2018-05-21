@@ -5,30 +5,23 @@ defmodule Ccxtpy do
   Documentation for Ccxtpy.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Ccxtpy.hello
-      :world
-
-  """
-  def exchanges do
-    {:ok, py} = Python.start(python_path: Path.expand("priv/python"))
-
-    res = Python.call(py, "ccxt_port", "fetch_exchanges", [])
-    Poison.Parser.parse!(res)
+  def exchanges(pid) do
+    res = Python.call(pid, "ccxt_port", "fetch_exchanges", [])
+    exchanges = Poison.Parser.parse!(res)
+    for ex <- exchanges, into: %{} do
+      AtomicMap.convert(ex, %{safe: false})
+    end
   end
 
-  def fetch_markets_for_exchange(exchange) do
-    {:ok, py} = Python.start(python_path: Path.expand("priv/python"))
-
-    res = Python.call(py, "ccxt_port", "fetch_markets_for_exchange", [exchange])
-    Poison.Parser.parse!(res)
+  def fetch_markets_for_exchange(pid, exchange) do
+    res = Python.call(pid, "ccxt_port", "fetch_markets_for_exchange", [exchange])
+    markets = Poison.Parser.parse!(res)
+    for m <- markets, into: %{} do
+      AtomicMap.convert(m, %{safe: false})
+    end
   end
 
-  def fetch_ohlcvs(exchange, symbol, timeframe, since, limit) do
+  def fetch_ohlcvs(pid, exchange, symbol, timeframe, since, limit) do
     [base, quote] = String.split(symbol, "/")
 
     since =
@@ -40,14 +33,12 @@ defmodule Ccxtpy do
         since
       end
 
-    {:ok, py} = Python.start(python_path: Path.expand("priv/python"))
-
-    res = Python.call(py, "ccxt_port", "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
+    res = Python.call(pid, "ccxt_port", "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
 
     res
     |> Poison.Parser.parse!()
     |> parse_ohlcvs()
-    |> Enum.map(&Map.merge(&1, %{base: base, quote: quote}))
+    |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
   end
 
   def parse_ohlcvs(raw_ohlcvs) do

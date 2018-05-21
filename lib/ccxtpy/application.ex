@@ -10,6 +10,7 @@ defmodule Ccxtpy.Application do
     children = [
       # Starts a worker by calling: Ccxtpy.Worker.start_link(arg)
       # {Ccxtpy.Worker, arg},
+      {Ccxtpy.Port, [Ccxtpy.Port]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

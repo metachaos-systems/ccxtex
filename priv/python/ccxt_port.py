@@ -15,7 +15,7 @@ def exchanges():
 def fetch_exchanges():
     exchanges_temp = {}
     for k, v in exchanges().items():
-        exchanges_temp[k] = {'timeout': v.timeout, 'id': v.id}
+        exchanges_temp[k] = {'timeout': v.timeout, 'id': v.id, 'has': v.has}
     return json.dumps(exchanges_temp)
 
 
