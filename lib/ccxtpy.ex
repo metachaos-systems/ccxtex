@@ -16,7 +16,8 @@ defmodule Ccxtpy do
   def exchanges do
     {:ok, py} = Python.start(python_path: Path.expand("priv/python"))
 
-    Python.call(py, "ccxt_port", "exchanges", [])
+    res = Python.call(py, "ccxt_port", "fetch_exchanges", [])
+    Poison.Parser.parse!(res)
   end
 
   def fetch_markets_for_exchange(exchange) do

@@ -12,6 +12,12 @@ def exchanges():
         exchanges[id] = exchange()
     return exchanges
 
+def fetch_exchanges():
+    exchanges_temp = {}
+    for k, v in exchanges().items():
+        exchanges_temp[k] = {'timeout': v.timeout, 'id': v.id}
+    return json.dumps(exchanges_temp)
+
 
 def fetch_markets_for_exchange(exchange_id):
     exchange = exchanges()[exchange_id]
