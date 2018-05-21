@@ -1,11 +1,11 @@
 # coding=utf-8
 
 import time
-import ccxt  
+import ccxt
 import json
 
-def exchanges(): 
-    exchanges = {}  
+def exchanges():
+    exchanges = {}
 
     for id in ccxt.exchanges:
         exchange = getattr(ccxt, id)
@@ -26,5 +26,8 @@ def fetch_markets_for_exchange(exchange_id):
 
 def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
     exchange = exchanges()[exchange_id]
+    exchange.options["warnOnFetchOHLCVLimitArgument"] = False
+    if exchange.has['CORS']:
+        exchange.proxy = 'http://localhost:33000/'
     res = exchange.fetch_ohlcv(symbol, timeframe, since, limit)
     return json.dumps(res)
