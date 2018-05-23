@@ -26,6 +26,14 @@ defmodule CcxtpyTest do
   end
 
 
+  test "fetches ohlcvs without since or limit args" do
+    exchange = "kuna"
+    symbol = "BTC/UAH"
+    timeframe = "1h"
+    ohlcvs = fetch_ohlcvs(@pid, exchange, symbol, timeframe, nil, nil)
+    assert %{base: _, high: _, base_volume: _} = hd(ohlcvs)
+  end
+
   test "fetches exchanges list" do
     exchanges = exchanges(@pid)
     assert %{has: _, id: _, timeout: _} = exchanges["bitfinex2"]
