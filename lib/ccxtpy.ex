@@ -61,4 +61,5 @@ defmodule Ccxtpy do
 
   def parse_float(term) when is_float(term), do: term
   def parse_float(term) when is_integer(term), do: term
+  def parse_float(nil), do: nil
 end

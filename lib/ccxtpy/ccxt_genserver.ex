@@ -5,7 +5,7 @@ defmodule Ccxtpy.Port do
 
   def start_link(name, _opts \\ []) do
     app_dir = Application.app_dir(:ccxtpy)
-    Python.start(name, python_path: Path.expand(app_dir <> "/priv/python"))
+    Python.start(name, python: "python3", python_path: Path.expand(app_dir <> "/priv/python"))
   end
 
   def init(args) do
