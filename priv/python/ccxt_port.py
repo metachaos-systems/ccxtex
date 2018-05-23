@@ -26,12 +26,29 @@ def fetch_markets_for_exchange(exchange_id):
     res = exchange.load_markets()
     return json.dumps(res)
 
-
-def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
+def fetch_ohlcv_no_since_limit(exchange_id, symbol, timeframe):
     exchange = exchanges()[exchange_id.decode('utf-8')]
     exchange.options["warnOnFetchOHLCVLimitArgument"] = False
     if exchange.has['CORS']:
         exchange.proxy = 'http://localhost:33000/'
 
-    res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe.decode('utf-8'), since, limit)
+    res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe.decode('utf-8'))
+    return json.dumps(res)
+
+
+
+def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
+    exchange = exchanges()[exchange_id.decode('utf-8')]
+    timeframe_str =timeframe.decode('utf-8')
+    exchange.options["warnOnFetchOHLCVLimitArgument"] = False
+    if exchange.has['CORS']:
+        exchange.proxy = 'http://localhost:33000/'
+
+    if since == b'nil' and limit == b'nil':
+        res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str)
+    elif limit == b'nil':
+        res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str, since)
+    else:
+        res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str, since, limit)
+
     return json.dumps(res)
