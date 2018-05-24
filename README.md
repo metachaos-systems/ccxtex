@@ -16,7 +16,7 @@ end
 
 ### Python
 
-You need [ccxt](https://pypi.org/project/ccxt/) python package installed for this module to work.
+You need Python 3 and [ccxt](https://pypi.org/project/ccxt/) python package installed for this module to work.
 
 ## Status and roadmap
 
