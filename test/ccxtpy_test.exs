@@ -38,4 +38,11 @@ defmodule CcxtpyTest do
     exchanges = exchanges(@pid)
     assert %{has: _, id: _, timeout: _} = exchanges["bitfinex2"]
   end
+
+  test "fetch bitfinex ticker" do
+    exchange = "bitstamp"
+    symbol = "ETH/USD"
+    ticker = fetch_ticker(@pid, exchange, symbol)
+    assert %{base: _, high: _, base_volume: _} = ticker
+  end
 end
