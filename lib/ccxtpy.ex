@@ -15,6 +15,30 @@ defmodule Ccxtpy do
     |> convert_keys_to_atoms()
   end
 
+  @doc """
+  Usage:
+
+  ```
+  exchange = "bitstamp"
+  symbol = "ETH/USD"
+  ticker = fetch_ticker(@pid, exchange, symbol)
+  ```
+
+  Return value example:
+  ```
+  %{
+  base: "ETH",
+  base_volume: 4234.62695691,
+  close: 731.16,
+  exchange: "bitfinex2",
+  high: 737.07,
+  low: 726,
+  open: 736.77,
+  quote: "USDT",
+  timestamp: ~N[2018-01-01 00:00:00.000]
+  }
+  ```
+  """
   def fetch_ticker(pid, exchange, symbol) do
     call_default(pid, "fetch_ticker", [exchange, symbol])
     |> convert_keys_to_atoms()
