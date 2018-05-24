@@ -43,6 +43,6 @@ defmodule CcxtpyTest do
     exchange = "bitstamp"
     symbol = "ETH/USD"
     ticker = fetch_ticker(@pid, exchange, symbol)
-    assert %{base: _, high: _, base_volume: _} = ticker
+    assert %{ask: _, bid: _, vwap: _} = ticker
   end
 end

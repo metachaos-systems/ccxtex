@@ -52,3 +52,9 @@ def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
         res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str, since, limit)
 
     return json.dumps(res)
+
+
+def fetch_ticker(exchange_id, symbol):
+    exchange = exchanges()[exchange_id.decode('utf-8')]
+    res = exchange.fetch_ticker(symbol.decode('utf-8'))
+    return json.dumps(res)

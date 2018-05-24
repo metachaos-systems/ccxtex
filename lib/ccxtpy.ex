@@ -21,7 +21,14 @@ defmodule Ccxtpy do
     end
   end
 
-  def fetch_ohlcvs(pid, exchange, symbol, timeframe, since, limit) do
+  def fetch_ticker(pid, exchange, symbol) do
+    res = Python.call(pid, "ccxt_port", "fetch_ticker", [exchange, symbol])
+    res
+    |> Poison.Parser.parse!()
+    |> AtomicMap.convert(%{safe: false})
+  end
+
+  def fetch_ohlcvs(pid, exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
     [base, quote] = String.split(symbol, "/")
 
     since =
