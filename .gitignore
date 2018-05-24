@@ -23,3 +23,6 @@ erl_crash.dump
 ccxtpy-*.tar
 
 /.elixir_ls
+
+/priv/python/__pycache__
+/priv/python/*.pyc

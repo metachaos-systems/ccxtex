@@ -1,7 +1,10 @@
 defmodule Ccxtpy.Port do
-    use Export.Python
-
+  use Export.Python
   use GenServer
+
+  @doc """
+  Handles start and initialization of port process to call python programs.
+  """
 
   def start_link(name, _opts \\ []) do
     app_dir = Application.app_dir(:ccxtpy)

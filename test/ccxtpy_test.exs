@@ -25,7 +25,6 @@ defmodule CcxtpyTest do
     assert %{base: _, high: _, base_volume: _} = hd(ohlcvs)
   end
 
-
   test "fetches ohlcvs without since or limit args" do
     exchange = "kuna"
     symbol = "BTC/UAH"

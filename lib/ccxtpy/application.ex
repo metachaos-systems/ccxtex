@@ -8,8 +8,6 @@ defmodule Ccxtpy.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Starts a worker by calling: Ccxtpy.Worker.start_link(arg)
-      # {Ccxtpy.Worker, arg},
       {Ccxtpy.Port, [Ccxtpy.Port]}
     ]
 
