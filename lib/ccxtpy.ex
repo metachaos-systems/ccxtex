@@ -2,30 +2,22 @@ defmodule Ccxtpy do
   use Export.Python
 
   @moduledoc """
-  Documentation for Ccxtpy.
+  Ccxtpy main module
   """
 
-  def exchanges(pid) do
-    res = Python.call(pid, "ccxt_port", "fetch_exchanges", [])
-    exchanges = Poison.Parser.parse!(res)
-    for ex <- exchanges, into: %{} do
-      AtomicMap.convert(ex, %{safe: false})
-    end
+  def fetch_exchanges(pid) do
+    call_default(pid, "fetch_exchanges")
+    |> convert_keys_to_atoms()
   end
 
   def fetch_markets_for_exchange(pid, exchange) do
-    res = Python.call(pid, "ccxt_port", "fetch_markets_for_exchange", [exchange])
-    markets = Poison.Parser.parse!(res)
-    for m <- markets, into: %{} do
-      AtomicMap.convert(m, %{safe: false})
-    end
+    call_default(pid, "fetch_markets_for_exchange", [exchange])
+    |> convert_keys_to_atoms()
   end
 
   def fetch_ticker(pid, exchange, symbol) do
-    res = Python.call(pid, "ccxt_port", "fetch_ticker", [exchange, symbol])
-    res
-    |> Poison.Parser.parse!()
-    |> AtomicMap.convert(%{safe: false})
+    call_default(pid, "fetch_ticker", [exchange, symbol])
+    |> convert_keys_to_atoms()
   end
 
   def fetch_ohlcvs(pid, exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
@@ -40,10 +32,9 @@ defmodule Ccxtpy do
         since
       end
 
-    res = Python.call(pid, "ccxt_port", "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
+    res = call_default(pid, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
 
     res
-    |> Poison.Parser.parse!()
     |> parse_ohlcvs()
     |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
   end
@@ -59,6 +50,15 @@ defmodule Ccxtpy do
         base_volume: parse_float(volume)
       }
     end
+  end
+
+  def call_default(pid, fn_name, args \\ []) do
+    res = Python.call(pid, "ccxt_port", fn_name, args)
+    Poison.Parser.parse!(res)
+  end
+
+  def convert_keys_to_atoms(x) do
+    AtomicMap.convert(x, %{safe: false})
   end
 
   def parse_float(term) when is_binary(term) do

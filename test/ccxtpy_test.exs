@@ -35,8 +35,8 @@ defmodule CcxtpyTest do
   end
 
   test "fetches exchanges list" do
-    exchanges = exchanges(@pid)
-    assert %{has: _, id: _, timeout: _} = exchanges["bitfinex2"]
+    exchanges = fetch_exchanges(@pid)
+    assert %{has: _, id: _, timeout: _} = exchanges[:poloniex]
   end
 
   test "fetch bitfinex ticker" do
