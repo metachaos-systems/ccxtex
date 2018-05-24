@@ -77,6 +77,59 @@ defmodule Ccxtpy do
   Return value example:
   ```
   %{
+  ask: 577.35,
+  ask_volume: nil,
+  average: nil,
+  base_volume: 73309.52075575,
+  bid: 576.8,
+  bid_volume: nil,
+  change: nil,
+  close: 577.35,
+  datetime: "2018-05-24T14:06:09.000Z",
+  high: 619.95,
+  info: %{
+    ask: "577.35",
+    bid: "576.80",
+    high: "619.95",
+    last: "577.35",
+    low: "549.28",
+    open: "578.40",
+    timestamp: "1527170769",
+    volume: "73309.52075575",
+    vwap: "582.86"
+  },
+  last: 577.35,
+  low: 549.28,
+  open: 578.4,
+  percentage: nil,
+  previous_close: nil,
+  quote_volume: 42729187.26769644,
+  symbol: "ETH/USD",
+  timestamp: 1527170769000,
+  vwap: 582.86
+  }
+  ```
+  """
+  def fetch_ticker(pid, exchange, symbol) do
+    call_default(pid, "fetch_ticker", [exchange, symbol])
+    |> convert_keys_to_atoms()
+  end
+
+  @doc """
+  Usage:
+
+  ```
+  exchange = "bitfinex2"
+  symbol = "ETH/USDT"
+  timeframe = "1h"
+  since = ~N[2018-01-01T00:00:00]
+  limit = 1000
+  ohlcvs = fetch_ohlcvs(@pid, exchange, symbol, timeframe, since, limit)
+  ```
+
+  Return value example:
+  ```
+  %{
   base: "ETH",
   base_volume: 4234.62695691,
   close: 731.16,
@@ -89,11 +142,6 @@ defmodule Ccxtpy do
   }
   ```
   """
-  def fetch_ticker(pid, exchange, symbol) do
-    call_default(pid, "fetch_ticker", [exchange, symbol])
-    |> convert_keys_to_atoms()
-  end
-
   def fetch_ohlcvs(pid, exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
     [base, quote] = String.split(symbol, "/")
 
