@@ -1,9 +1,9 @@
-defmodule CcxtpyTest do
-  import Ccxtpy
+defmodule CcxtexTest do
+  import Ccxtex
   use ExUnit.Case
-  doctest Ccxtpy
+  doctest Ccxtex
 
-  @pid Ccxtpy.Port
+  @pid Ccxtex.Port
 
   test "fetches ohlcvs from bitfinex2" do
     exchange = "bitfinex2"

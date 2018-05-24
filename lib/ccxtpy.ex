@@ -1,8 +1,8 @@
-defmodule Ccxtpy do
+defmodule Ccxtex do
   use Export.Python
 
   @moduledoc """
-  Ccxtpy main module
+  Ccxtex main module
   """
 
   @doc """

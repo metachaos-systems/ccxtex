@@ -10,7 +10,7 @@ Ccxtex provides easy Elixir/Erlang interop with python ccxt library that provide
 ```elixir
 def deps do
   [
-    {:ccxtpy, github: "cyberpunk-ventures/ccxtex"}
+    {:ccxtex, github: "cyberpunk-ventures/ccxtex"}
   ]
 end
 ```
@@ -169,4 +169,4 @@ vwap: 582.86
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/ccxtpy](https://hexdocs.pm/ccxtpy).
+be found at [https://hexdocs.pm/ccxtex](https://hexdocs.pm/ccxtex).

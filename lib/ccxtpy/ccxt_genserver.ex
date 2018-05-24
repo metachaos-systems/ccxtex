@@ -1,4 +1,4 @@
-defmodule Ccxtpy.Port do
+defmodule Ccxtex.Port do
   use Export.Python
   use GenServer
 
@@ -7,7 +7,7 @@ defmodule Ccxtpy.Port do
   """
 
   def start_link(name, _opts \\ []) do
-    app_dir = Application.app_dir(:ccxtpy)
+    app_dir = Application.app_dir(:ccxtex)
     Python.start(name, python: "python3", python_path: Path.expand(app_dir <> "/priv/python"))
   end
 

@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :ccxtpy, key: :value
+#     config :ccxtex, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:ccxtpy, :key)
+#     Application.get_env(:ccxtex, :key)
 #
 # You can also configure a 3rd-party app:
 #

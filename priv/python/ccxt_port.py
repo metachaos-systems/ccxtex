@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import ccxt
+import os
 
 import time
 import ccxt
@@ -31,7 +32,7 @@ def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
     exchange = exchanges()[exchange_id.decode('utf-8')]
     timeframe_str =timeframe.decode('utf-8')
     exchange.options["warnOnFetchOHLCVLimitArgument"] = False
-    if exchange.has['CORS'] and os.environ['CCXT_CORS_PROXY']:
+    if exchange.has['CORS'] and os.environ.get('CCXT_CORS_PROXY'):
         exchange.proxy = os.environ['CCXT_CORS_PROXY']
 
     if since == b'nil' and limit == b'nil':
