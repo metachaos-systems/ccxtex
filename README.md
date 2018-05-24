@@ -1,9 +1,8 @@
 # Ccxtex
 
-Ccxtex provides easy Elixir/Erlang interop with python ccxt library that provides unified API to access hisorical data and trading operations for multiple cryptoexchanges.
+Ccxtex package offers easy Elixir/Erlang interoperability with [ccxt library](https://github.com/ccxt/ccxt) (python version) that provides unified API to hisorical data and trading operations for multiple cryptocurrency exchanges including GDAX, Bitfinex, Poloniex, Binance and others.
 
 ## Installation
-
 
 ### Elixir
 
