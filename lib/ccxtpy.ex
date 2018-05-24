@@ -5,6 +5,56 @@ defmodule Ccxtpy do
   Ccxtpy main module
   """
 
+  @doc """
+  Usage example:
+
+  `exchanges = fetch_exchanges(@pid)`
+
+
+  Return value example:
+
+  ```
+  [
+  ...
+  %{
+  has: %{
+    cancel_order: true,
+    cancel_orders: false,
+    cors: false,
+    create_deposit_address: true,
+    create_limit_order: true,
+    create_market_order: false,
+    create_order: true,
+    deposit: false,
+    edit_order: true,
+    fetch_balance: true,
+    fetch_closed_orders: "emulated",
+    fetch_currencies: true,
+    fetch_deposit_address: true,
+    fetch_funding_fees: false,
+    fetch_l2_order_book: true,
+    fetch_markets: true,
+    fetch_my_trades: true,
+    fetch_ohlcv: true,
+    fetch_open_orders: true,
+    fetch_order: "emulated",
+    fetch_order_book: true,
+    fetch_order_books: false,
+    fetch_orders: "emulated",
+    fetch_ticker: true,
+    fetch_tickers: true,
+    fetch_trades: true,
+    fetch_trading_fees: true,
+    private_api: true,
+    public_api: true,
+    withdraw: true
+  },
+  id: "poloniex",
+  timeout: 10000
+  }
+  ]
+  ```
+  """
   def fetch_exchanges(pid) do
     call_default(pid, "fetch_exchanges")
     |> convert_keys_to_atoms()
