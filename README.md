@@ -1,6 +1,6 @@
 # Ccxtex
 
-Ccxtex package offers easy Elixir/Erlang interoperability with [ccxt library](https://github.com/ccxt/ccxt) (python version) that provides unified API to hisorical data and trading operations for multiple cryptocurrency exchanges including GDAX, Bitfinex, Poloniex, Binance and others.
+Ccxtex package offers easy (presently somewhat brittle) Elixir/Erlang interoperability with python version of [ccxt library](https://github.com/ccxt/ccxt) that provides unified API to hisorical data and trading operations for multiple cryptocurrency exchanges including GDAX, Bitfinex, Poloniex, Binance and others.
 
 ## Installation
 
@@ -17,6 +17,8 @@ end
 ### Python
 
 You need Python 3 and [ccxt](https://pypi.org/project/ccxt/) python package installed for this module to work.
+
+To install ccxt use `pip3 install ccxt`
 
 ## Status and roadmap
 
@@ -47,7 +49,7 @@ Default process id (@pid) is Ccxtex.Port. You can always start and use another p
 ### Fetch exchanges
 
 Usage:
-`exchanges = fetch_exchanges(@pid)`
+`exchanges = Ccxtex.fetch_exchanges(Ccxtex.Port)`
 
 
 ```
@@ -100,32 +102,7 @@ Usage:
 ```
 exchange = "bitstamp"
 symbol = "ETH/USD"
-ticker = fetch_ticker(@pid, exchange, symbol)
-```
-
-Return value example:
-```
-%{
-base: "ETH",
-base_volume: 4234.62695691,
-close: 731.16,
-exchange: "bitfinex2",
-high: 737.07,
-low: 726,
-open: 736.77,
-quote: "USDT",
-timestamp: ~N[2018-01-01 00:00:00.000]
-}
-```
-
-### Fetch OHLCV
-
-Usage:
-
-```
-exchange = "bitstamp"
-symbol = "ETH/USD"
-ticker = fetch_ticker(@pid, exchange, symbol)
+ticker = Ccxtex.fetch_ticker(Ccxtex.Port, exchange, symbol)
 ```
 
 Return value example:
@@ -161,6 +138,31 @@ quote_volume: 42729187.26769644,
 symbol: "ETH/USD",
 timestamp: 1527170769000,
 vwap: 582.86
+}
+```
+
+### Fetch OHLCV
+
+Usage:
+
+```
+exchange = "bitstamp"
+symbol = "ETH/USD"
+ticker = Ccxtex.fetch_ticker(Ccxtex.Port, exchange, symbol)
+```
+
+Return value example:
+```
+%{
+base: "ETH",
+base_volume: 4234.62695691,
+close: 731.16,
+exchange: "bitfinex2",
+high: 737.07,
+low: 726,
+open: 736.77,
+quote: "USDT",
+timestamp: ~N[2018-01-01 00:00:00.000]
 }
 ```
 
