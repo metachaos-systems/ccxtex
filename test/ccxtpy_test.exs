@@ -3,15 +3,13 @@ defmodule CcxtexTest do
   use ExUnit.Case
   doctest Ccxtex
 
-  @pid Ccxtex.Port
-
   test "fetches ohlcvs from bitfinex2" do
     exchange = "bitfinex2"
     symbol = "ETH/USDT"
     timeframe = "1h"
     since = ~N[2018-01-01T00:00:00]
     limit = 1000
-    ohlcvs = fetch_ohlcvs(@pid, exchange, symbol, timeframe, since, limit)
+    {:ok, ohlcvs} = fetch_ohlcvs(exchange, symbol, timeframe, since, limit)
     assert %{base: _, high: _, base_volume: _} = hd(ohlcvs)
   end
 
@@ -21,7 +19,7 @@ defmodule CcxtexTest do
     timeframe = "1h"
     since = ~N[2018-01-01T00:00:00]
     limit = 1000
-    ohlcvs = fetch_ohlcvs(@pid, exchange, symbol, timeframe, since, limit)
+    {:ok, ohlcvs} = fetch_ohlcvs(exchange, symbol, timeframe, since, limit)
     assert %{base: _, high: _, base_volume: _} = hd(ohlcvs)
   end
 
@@ -29,19 +27,19 @@ defmodule CcxtexTest do
     exchange = "kuna"
     symbol = "BTC/UAH"
     timeframe = "1h"
-    ohlcvs = fetch_ohlcvs(@pid, exchange, symbol, timeframe, nil, nil)
+    {:ok, ohlcvs} = fetch_ohlcvs(exchange, symbol, timeframe, nil, nil)
     assert %{base: _, high: _, base_volume: _} = hd(ohlcvs)
   end
 
   test "fetches exchanges list" do
-    exchanges = fetch_exchanges(@pid)
+    {:ok, exchanges} = fetch_exchanges()
     assert %{has: _, id: _, timeout: _} = exchanges[:poloniex]
   end
 
   test "fetch bitfinex ticker" do
     exchange = "bitstamp"
     symbol = "ETH/USD"
-    ticker = fetch_ticker(@pid, exchange, symbol)
+    {:ok, ticker} = fetch_ticker(exchange, symbol)
     assert %{ask: _, bid: _, vwap: _} = ticker
   end
 end
