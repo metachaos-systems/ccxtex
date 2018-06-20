@@ -16,8 +16,9 @@ defmodule Ccxtex.Port do
   end
 
   def child_spec(args) do
+    [name] = args
     %{
-      id: __MODULE__,
+      id: name,
       start: {__MODULE__, :start_link, args}
     }
   end
