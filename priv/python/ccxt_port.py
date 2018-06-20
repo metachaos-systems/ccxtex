@@ -1,11 +1,11 @@
 # coding=utf-8
 
-import ccxt
 import os
 
 import time
 import ccxt
 import json
+
 
 def exchanges():
     exchanges = {}
@@ -14,6 +14,7 @@ def exchanges():
         exchange = getattr(ccxt, id)
         exchanges[id] = exchange()
     return exchanges
+
 
 def fetch_exchanges():
     exchanges_temp = {}
@@ -30,7 +31,7 @@ def fetch_markets_for_exchange(exchange_id):
 
 def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
     exchange = exchanges()[exchange_id.decode('utf-8')]
-    timeframe_str =timeframe.decode('utf-8')
+    timeframe_str = timeframe.decode('utf-8')
     exchange.options["warnOnFetchOHLCVLimitArgument"] = False
     if exchange.has['CORS'] and os.environ.get('CCXT_CORS_PROXY'):
         exchange.proxy = os.environ['CCXT_CORS_PROXY']
@@ -38,9 +39,11 @@ def fetch_ohlcv(exchange_id, symbol, timeframe, since, limit):
     if since == b'nil' and limit == b'nil':
         res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str)
     elif limit == b'nil':
-        res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str, since)
+        res = exchange.fetch_ohlcv(
+            symbol.decode('utf-8'), timeframe_str, since)
     else:
-        res = exchange.fetch_ohlcv(symbol.decode('utf-8'), timeframe_str, since, limit)
+        res = exchange.fetch_ohlcv(symbol.decode(
+            'utf-8'), timeframe_str, since, limit)
 
     return json.dumps(res)
 
