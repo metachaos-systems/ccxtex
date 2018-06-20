@@ -178,13 +178,13 @@ defmodule Ccxtex do
 
   def call_default(Ccxtex.Port, fn_name, args) do
     res = Python.call(Ccxtex.Port, "ccxt_port", fn_name, args)
-    Poison.Parser.parse!(res)
+    {:ok, Poison.Parser.parse!(res)}
   end
 
   def call_default(exchange, fn_name, args) do
     process_name = String.to_atom("ccxt_exchange_#{exchange}")
     res = Python.call(process_name, "ccxt_port", fn_name, args)
-    Poison.Parser.parse!(res)
+    {:ok, Poison.Parser.parse!(res)}
   end
 
   def convert_keys_to_atoms(x) do
