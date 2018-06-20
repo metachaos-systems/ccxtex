@@ -55,13 +55,13 @@ defmodule Ccxtex do
   ]
   ```
   """
-  def fetch_exchanges(pid) do
-    call_default(pid, "fetch_exchanges")
+  def fetch_exchanges() do
+    call_default(Ccxtex.Port, "fetch_exchanges")
     |> convert_keys_to_atoms()
   end
 
-  def fetch_markets_for_exchange(pid, exchange) do
-    call_default(pid, "fetch_markets_for_exchange", [exchange])
+  def fetch_markets_for_exchange(exchange) do
+    call_default(exchange, "fetch_markets_for_exchange", [exchange])
     |> convert_keys_to_atoms()
   end
 
@@ -142,7 +142,7 @@ defmodule Ccxtex do
   }
   ```
   """
-  def fetch_ohlcvs(pid, exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
+  def fetch_ohlcvs(exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
     [base, quote] = String.split(symbol, "/")
 
     since =
@@ -154,7 +154,7 @@ defmodule Ccxtex do
         since
       end
 
-    res = call_default(pid, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
+    res = call_default(exchange, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
 
     res
     |> parse_ohlcvs()
@@ -174,8 +174,16 @@ defmodule Ccxtex do
     end
   end
 
-  def call_default(pid, fn_name, args \\ []) do
-    res = Python.call(pid, "ccxt_port", fn_name, args)
+  def call_default(exchange, fn_name, args \\ [])
+
+  def call_default(Ccxtex.Port, fn_name, args) do
+    res = Python.call(Ccxtex.Port, "ccxt_port", fn_name, args)
+    Poison.Parser.parse!(res)
+  end
+
+  def call_default(exchange, fn_name, args) do
+    process_name = String.to_atom("ccxt_exchange_#{exchange}")
+    res = Python.call(process_name, "ccxt_port", fn_name, args)
     Poison.Parser.parse!(res)
   end
 
