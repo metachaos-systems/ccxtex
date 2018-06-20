@@ -26,7 +26,8 @@ defmodule Ccxtex.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:atomic_map, ">= 0.0.0"},
       {:export, ">= 0.0.0"},
-      {:poison, ">= 0.0.0"}
+      {:poison, ">= 0.0.0"},
+      {:erlport, github: "ugufugu/erlport", override: true}
     ]
   end
 end
