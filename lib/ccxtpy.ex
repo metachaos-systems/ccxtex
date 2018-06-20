@@ -110,8 +110,8 @@ defmodule Ccxtex do
   }
   ```
   """
-  def fetch_ticker(pid, exchange, symbol) do
-    call_default(pid, "fetch_ticker", [exchange, symbol])
+  def fetch_ticker(exchange, symbol) do
+    call_default(exchange, "fetch_ticker", [exchange, symbol])
     |> convert_keys_to_atoms()
   end
 
@@ -154,11 +154,12 @@ defmodule Ccxtex do
         since
       end
 
-    res = call_default(exchange, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
+    {:ok, res} = call_default(exchange, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
 
-    res
+    ohlcvs = res
     |> parse_ohlcvs()
     |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
+    {:ok, ohlcvs}
   end
 
   def parse_ohlcvs(raw_ohlcvs) do
