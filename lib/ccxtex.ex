@@ -180,17 +180,13 @@ defmodule Ccxtex do
     end
   end
 
-  defp call_default(exchange, fn_name, args \\ [])
+  defp call_default(exchange, fn_name, args \\ []) do
+    process_name =
+      case exchange do
+        Ccxtex.Port -> Ccxtex.Port
+        _ -> String.to_atom("ccxt_exchange_#{exchange}")
+      end
 
-  defp call_default(Ccxtex.Port, fn_name, args) do
-    res = Python.call(Ccxtex.Port, "ccxt_port", fn_name, args)
-    data = Poison.Parser.parse!(res)
-    data = convert_keys_to_atoms(data)
-    {:ok, data}
-  end
-
-  defp call_default(exchange, fn_name, args) do
-    process_name = String.to_atom("ccxt_exchange_#{exchange}")
     res = Python.call(process_name, "ccxt_port", fn_name, args)
     data = Poison.Parser.parse!(res)
     data = convert_keys_to_atoms(data)

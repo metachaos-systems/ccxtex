@@ -16,7 +16,6 @@ defmodule Ccxtex.ExchangeSupervisor do
       {Ccxtex.Port, [name]}
     end
 
-
     Supervisor.init(children, strategy: :one_for_one)
   end
 end
