@@ -58,13 +58,11 @@ defmodule Ccxtex do
   @spec fetch_exchanges() :: {:ok, map} | {:error, any}
   def fetch_exchanges() do
     call_default(Ccxtex.Port, "fetch_exchanges")
-    |> convert_keys_to_atoms()
   end
 
   @spec fetch_markets_for_exchange(String.t()) :: {:ok, map} | {:error, any}
   def fetch_markets_for_exchange(exchange) do
     call_default(exchange, "fetch_markets_for_exchange", [exchange])
-    |> convert_keys_to_atoms()
   end
 
   @doc """
@@ -115,7 +113,6 @@ defmodule Ccxtex do
   @spec fetch_ticker(String.t(), String.t()) :: {:ok, map} | {:error, any}
   def fetch_ticker(exchange, symbol) do
     call_default(exchange, "fetch_ticker", [exchange, symbol])
-    |> convert_keys_to_atoms()
   end
 
   @doc """
@@ -187,13 +184,17 @@ defmodule Ccxtex do
 
   defp call_default(Ccxtex.Port, fn_name, args) do
     res = Python.call(Ccxtex.Port, "ccxt_port", fn_name, args)
-    {:ok, Poison.Parser.parse!(res)}
+    data = Poison.Parser.parse!(res)
+    data = convert_keys_to_atoms(data)
+    {:ok, data}
   end
 
   defp call_default(exchange, fn_name, args) do
     process_name = String.to_atom("ccxt_exchange_#{exchange}")
     res = Python.call(process_name, "ccxt_port", fn_name, args)
-    {:ok, Poison.Parser.parse!(res)}
+    data = Poison.Parser.parse!(res)
+    data = convert_keys_to_atoms(data)
+    {:ok, data}
   end
 
   defp convert_keys_to_atoms(x) do
