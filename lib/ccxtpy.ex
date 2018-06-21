@@ -55,7 +55,7 @@ defmodule Ccxtex do
   ]
   ```
   """
-  @spec fetch_exchanges() :: map
+  @spec fetch_exchanges() :: {:ok, map} | {:error, any}
   def fetch_exchanges() do
     call_default(Ccxtex.Port, "fetch_exchanges")
     |> convert_keys_to_atoms()
