@@ -170,7 +170,7 @@ defmodule Ccxtex do
     {:ok, ohlcvs}
   end
 
-  def parse_ohlcvs(raw_ohlcvs) do
+  defp parse_ohlcvs(raw_ohlcvs) do
     for [unix_time_ms, open, high, low, close, volume] <- raw_ohlcvs do
       %{
         timestamp: unix_time_ms |> DateTime.from_unix!(:millisecond) |> DateTime.to_naive(),
@@ -183,29 +183,29 @@ defmodule Ccxtex do
     end
   end
 
-  def call_default(exchange, fn_name, args \\ [])
+  defp call_default(exchange, fn_name, args \\ [])
 
-  def call_default(Ccxtex.Port, fn_name, args) do
+  defp call_default(Ccxtex.Port, fn_name, args) do
     res = Python.call(Ccxtex.Port, "ccxt_port", fn_name, args)
     {:ok, Poison.Parser.parse!(res)}
   end
 
-  def call_default(exchange, fn_name, args) do
+  defp call_default(exchange, fn_name, args) do
     process_name = String.to_atom("ccxt_exchange_#{exchange}")
     res = Python.call(process_name, "ccxt_port", fn_name, args)
     {:ok, Poison.Parser.parse!(res)}
   end
 
-  def convert_keys_to_atoms(x) do
+  defp convert_keys_to_atoms(x) do
     AtomicMap.convert(x, %{safe: false})
   end
 
-  def parse_float(term) when is_binary(term) do
+  defp parse_float(term) when is_binary(term) do
     {float, _} = Float.parse(term)
     float
   end
 
-  def parse_float(term) when is_float(term), do: term
-  def parse_float(term) when is_integer(term), do: term
-  def parse_float(nil), do: nil
+  defp parse_float(term) when is_float(term), do: term
+  defp parse_float(term) when is_integer(term), do: term
+  defp parse_float(nil), do: nil
 end
