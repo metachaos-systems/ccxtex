@@ -27,7 +27,8 @@ defmodule Ccxtex.MixProject do
       {:atomic_map, ">= 0.0.0"},
       {:export, ">= 0.0.0"},
       {:poison, ">= 0.0.0"},
-      {:erlport, github: "ugufugu/erlport", override: true}
+      {:erlport, github: "ugufugu/erlport", override: true},
+      {:dialyxir, "~> 1.0.0-rc.2", only: [:dev], runtime: false}
     ]
   end
 end
