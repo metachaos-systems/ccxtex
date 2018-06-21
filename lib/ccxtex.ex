@@ -70,8 +70,8 @@ defmodule Ccxtex do
 
   ```
   exchange = "bitstamp"
-  symbol = "ETH/USD"
-  ticker = fetch_ticker(@pid, exchange, symbol)
+  pair_symbol = "ETH/USD"
+  ticker = fetch_ticker(@pid, exchange, pair_symbol)
   ```
 
   Return value example:
@@ -104,15 +104,15 @@ defmodule Ccxtex do
   percentage: nil,
   previous_close: nil,
   quote_volume: 42729187.26769644,
-  symbol: "ETH/USD",
+  pair_symbol: "ETH/USD",
   timestamp: 1527170769000,
   vwap: 582.86
   }
   ```
   """
   @spec fetch_ticker(String.t(), String.t()) :: {:ok, map} | {:error, any}
-  def fetch_ticker(exchange, symbol) do
-    call_default(exchange, "fetch_ticker", [exchange, symbol])
+  def fetch_ticker(exchange, pair_symbol) do
+    call_default(exchange, "fetch_ticker", [exchange, pair_symbol])
   end
 
   @doc """
@@ -120,11 +120,11 @@ defmodule Ccxtex do
 
   ```
   exchange = "bitfinex2"
-  symbol = "ETH/USDT"
+  pair_symbol = "ETH/USDT"
   timeframe = "1h"
   since = ~N[2018-01-01T00:00:00]
   limit = 1000
-  ohlcvs = fetch_ohlcvs(@pid, exchange, symbol, timeframe, since, limit)
+  ohlcvs = fetch_ohlcvs(@pid, exchange, pair_symbol, timeframe, since, limit)
   ```
 
   Return value example:
@@ -144,8 +144,8 @@ defmodule Ccxtex do
   """
   @spec fetch_ohlcvs(String.t(), String.t(), String.t(), NaiveDateTime.t()) ::
           {:ok, [map]} | {:error, any}
-  def fetch_ohlcvs(exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
-    [base, quote] = String.split(symbol, "/")
+  def fetch_ohlcvs(exchange, pair_symbol, timeframe, since \\ nil, limit \\ nil) do
+    [base, quote] = String.split(pair_symbol, "/")
 
     since =
       if since do
@@ -157,7 +157,7 @@ defmodule Ccxtex do
       end
 
     {:ok, res} =
-      call_default(exchange, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
+      call_default(exchange, "fetch_ohlcv", [exchange, pair_symbol, timeframe, since, limit])
 
     ohlcvs =
       res
