@@ -55,11 +55,13 @@ defmodule Ccxtex do
   ]
   ```
   """
+  @spec fetch_exchanges() :: map
   def fetch_exchanges() do
     call_default(Ccxtex.Port, "fetch_exchanges")
     |> convert_keys_to_atoms()
   end
 
+  @spec fetch_markets_for_exchange(String.t()) :: {:ok, map} | {:error, any}
   def fetch_markets_for_exchange(exchange) do
     call_default(exchange, "fetch_markets_for_exchange", [exchange])
     |> convert_keys_to_atoms()
@@ -110,6 +112,7 @@ defmodule Ccxtex do
   }
   ```
   """
+  @spec fetch_ticker(String.t(), String.t()) :: {:ok, map} | {:error, any}
   def fetch_ticker(exchange, symbol) do
     call_default(exchange, "fetch_ticker", [exchange, symbol])
     |> convert_keys_to_atoms()
@@ -142,6 +145,8 @@ defmodule Ccxtex do
   }
   ```
   """
+  @spec fetch_ohlcvs(String.t(), String.t(), String.t(), NaiveDateTime.t()) ::
+          {:ok, [map]} | {:error, any}
   def fetch_ohlcvs(exchange, symbol, timeframe, since \\ nil, limit \\ nil) do
     [base, quote] = String.split(symbol, "/")
 
@@ -154,11 +159,14 @@ defmodule Ccxtex do
         since
       end
 
-    {:ok, res} = call_default(exchange, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
+    {:ok, res} =
+      call_default(exchange, "fetch_ohlcv", [exchange, symbol, timeframe, since, limit])
 
-    ohlcvs = res
-    |> parse_ohlcvs()
-    |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
+    ohlcvs =
+      res
+      |> parse_ohlcvs()
+      |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
+
     {:ok, ohlcvs}
   end
 
