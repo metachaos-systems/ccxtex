@@ -1,6 +1,6 @@
 defmodule CcxtexTest do
   import Ccxtex
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Ccxtex
 
   test "fetches ohlcvs from bitfinex2" do
