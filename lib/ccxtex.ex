@@ -156,15 +156,17 @@ defmodule Ccxtex do
         since
       end
 
-    {:ok, res} =
-      call_default(exchange, "fetch_ohlcv", [exchange, pair_symbol, timeframe, since, limit])
+    with {:ok, res} <-
+           call_default(exchange, "fetch_ohlcv", [exchange, pair_symbol, timeframe, since, limit]) do
+      ohlcvs =
+        res
+        |> parse_ohlcvs()
+        |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
 
-    ohlcvs =
-      res
-      |> parse_ohlcvs()
-      |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
-
-    {:ok, ohlcvs}
+      {:ok, ohlcvs}
+    else
+      err -> err
+    end
   end
 
   defp parse_ohlcvs(raw_ohlcvs) do
