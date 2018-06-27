@@ -1,13 +1,6 @@
 # Ccxtex
 
-Ccxtex package offers easy (presently somewhat brittle) Elixir/Erlang interoperability with python version of [ccxt library](https://github.com/ccxt/ccxt) that provides unified API to hisorical data and trading operations for multiple cryptocurrency exchanges including GDAX, Bitfinex, Poloniex, Binance and others.
-
-## Changelog (v0.1 to v0.2)
-
-* added exchanges supervisor to start a process for every exchanges
-* added routing of calls to the corresponding exchange by default
-* improved usability of function calls that now do not require a pid argument
-* added specs to the all public functions
+Ccxtex package offers easy (presently somewhat brittle) Elixir/Erlang interoperability with python version of [ccxt library](https://github.com/ccxt/ccxt). Ccxt provides an unified API for querying for historical/recent data and trading operations for multiple cryptocurrency exchanges including GDAX, Bitfinex, Poloniex, Binance and others.
 
 ## Installation
 
@@ -54,9 +47,6 @@ Ccxtex is usable, but is under active development, API is unstable and will chan
 
 ### Private APIs implementation and authentication are under consideration
 
-## Examples
-
-Default process id (@pid) is Ccxtex.Port. You can always start and use another process with Ccxtex.Port.start_link/2
 
 ### Fetch exchanges
 
