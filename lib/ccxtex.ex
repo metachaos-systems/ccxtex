@@ -195,7 +195,7 @@ defmodule Ccxtex do
       data = convert_keys_to_atoms(data)
       {:ok, data}
     rescue
-      e -> e
+      e -> {:error, e}
     end
   end
 
