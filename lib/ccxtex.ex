@@ -183,16 +183,20 @@ defmodule Ccxtex do
   end
 
   defp call_default(exchange, fn_name, args \\ []) do
-    process_name =
-      case exchange do
-        Ccxtex.Port -> Ccxtex.Port
-        _ -> String.to_atom("ccxt_exchange_#{exchange}")
-      end
+    try do
+      process_name =
+        case exchange do
+          Ccxtex.Port -> Ccxtex.Port
+          _ -> String.to_atom("ccxt_exchange_#{exchange}")
+        end
 
-    res = Python.call(process_name, "ccxt_port", fn_name, args)
-    data = Poison.Parser.parse!(res)
-    data = convert_keys_to_atoms(data)
-    {:ok, data}
+      res = Python.call(process_name, "ccxt_port", fn_name, args)
+      data = Poison.Parser.parse!(res)
+      data = convert_keys_to_atoms(data)
+      {:ok, data}
+    rescue
+      e -> e
+    end
   end
 
   defp convert_keys_to_atoms(x) do
