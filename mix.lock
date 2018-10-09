@@ -1,5 +1,6 @@
 %{
   "atomic_map": {:hex, :atomic_map, "0.9.3", "3c7f1302e0590164732d08ca999708efbb2cd768abf2911cf140280ce2dc499d", [:mix], [], "hexpm"},
+  "construct": {:hex, :construct, "1.2.1", "dc2f6e802a620d3775abc8d4ee2293002279c5574a3e133583ee0c7dae2fb3c5", [:mix], [], "hexpm"},
   "dialyxir": {:hex, :dialyxir, "1.0.0-rc.3", "774306f84973fc3f1e2e8743eeaa5f5d29b117f3916e5de74c075c02f1b8ef55", [:mix], [], "hexpm"},
   "erlport": {:hex, :erlport, "0.10.0", "2436ec2f4ed62538c6e9c52f523f9315b6002ee7e298d9bd10b35abc3f6b32e7", [:rebar3], [], "hexpm"},
   "export": {:hex, :export, "0.1.1", "6dfd268b0692428f89b9285859a2dc02b6dcd2e8fdfbca34ac6e6a331351df91", [:mix], [{:erlport, "~> 0.9", [hex: :erlport, repo: "hexpm", optional: false]}], "hexpm"},
