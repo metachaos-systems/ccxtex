@@ -28,7 +28,9 @@ defmodule Ccxtex.MixProject do
       {:export, ">= 0.0.0"},
       {:poison, "~> 3.0"},
       {:erlport, "0.10.0"},
-      {:dialyxir, "~> 1.0.0-rc.2", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0.0-rc.2", only: [:dev], runtime: false},
+      {:nodejs, "~> 0.1"},
+      {:jason, "~> 1.1"}
     ]
   end
 end
