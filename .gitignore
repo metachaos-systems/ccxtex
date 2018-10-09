@@ -26,3 +26,5 @@ ccxtex-*.tar
 
 /priv/python/__pycache__
 /priv/python/*.pyc
+
+/priv/js/node_modules/
