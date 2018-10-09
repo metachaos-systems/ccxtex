@@ -3,11 +3,11 @@ defmodule Ccxtex.OHLCVS.Opts do
 
   structure do
     field :exchange, :string
-    field :symbol_base, :string
-    field :symbol_quote, :string
+    field :base, :string
+    field :quote, :string
     field :timeframe, :string
-    field :since, :integer
-    field :limit, :limit
+    field :since, :utc_datetime
+    field :limit, :integer
   end
 
 end
