@@ -38,4 +38,13 @@ defmodule Ccxtex.NextTest do
     assert length(hd(ohlcvs)) == 6
   end
 
+  test "fetch bitfinex ticker" do
+    exchange = "bitstamp"
+    base = "ETH"
+    quote = "USD"
+    {:ok, ticker} = fetch_ticker(exchange, base, quote)
+    assert %{"ask" => _, "bid" => _, "vwap" => _} = ticker
+  end
+
+
 end

@@ -33,4 +33,19 @@ defmodule Ccxtex.Next do
       err_tup -> err_tup
     end
   end
+
+  @spec fetch_ticker(String.t, String.t, String.t) :: {:ok, any} | {:error, String.t()}
+  def fetch_ticker(exchange, base, quote) do
+    js_fn = {"main.js", :fetchTicker}
+
+    opts = %{
+      exchange: exchange,
+      symbol: base <> "/" <> quote
+    }
+    with {:ok, ohlcvs} <- NodeJS.call(js_fn, [opts]) do
+      {:ok, ohlcvs}
+    else
+      err_tup -> err_tup
+    end
+  end
 end
