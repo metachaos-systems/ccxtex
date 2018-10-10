@@ -6,8 +6,8 @@ defmodule Ccxtex.OHLCVS.Opts do
     field :base, :string
     field :quote, :string
     field :timeframe, :string
-    field :since, :utc_datetime
-    field :limit, :integer
+    field :since, :naive_datetime, default: nil
+    field :limit, :integer, default: nil
   end
 
 end
