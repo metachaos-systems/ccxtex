@@ -1,5 +1,6 @@
 defmodule Ccxtex.Next do
   alias Ccxtex.OHLCVS.Opts
+  alias Ccxtex.{Ticker, Utils, OHLCV}
 
   @spec exchanges() :: [String.t()]
   def exchanges() do
@@ -28,6 +29,9 @@ defmodule Ccxtex.Next do
       |> Map.put(:since, since_unix)
 
     with {:ok, ohlcvs} <- NodeJS.call(js_fn, [opts]) do
+      ohlcvs = ohlcvs
+      |> Utils.parse_ohlcvs()
+      |> Enum.map(&OHLCV.make!/1)
       {:ok, ohlcvs}
     else
       err_tup -> err_tup
@@ -42,8 +46,9 @@ defmodule Ccxtex.Next do
       exchange: exchange,
       symbol: base <> "/" <> quote
     }
-    with {:ok, ohlcvs} <- NodeJS.call(js_fn, [opts]) do
-      {:ok, ohlcvs}
+    with {:ok, ticker} <- NodeJS.call(js_fn, [opts]) do
+      ticker = Ticker.make(ticker)
+      {:ok, ticker}
     else
       err_tup -> err_tup
     end

@@ -1,7 +1,7 @@
 defmodule Ccxtex.NextTest do
   import Ccxtex.Next
   use ExUnit.Case, async: true
-  alias Ccxtex.Ticker
+  alias Ccxtex.{Ticker, OHLCV}
   doctest Ccxtex
 
   test "returns exchanges list" do
@@ -21,7 +21,7 @@ defmodule Ccxtex.NextTest do
       })
 
     {:ok, ohlcvs} = fetch_ohlcvs(opts)
-    assert length(hd(ohlcvs)) == 6
+    assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} = hd(ohlcvs)
   end
 
   test "fetches ohlcvs from bitfinex2" do
@@ -36,7 +36,7 @@ defmodule Ccxtex.NextTest do
       })
 
     {:ok, ohlcvs} = fetch_ohlcvs(opts)
-    assert length(hd(ohlcvs)) == 6
+    assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} = hd(ohlcvs)
   end
 
   test "fetch bitfinex ticker" do
