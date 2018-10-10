@@ -1,6 +1,7 @@
 defmodule Ccxtex.NextTest do
   import Ccxtex.Next
   use ExUnit.Case, async: true
+  alias Ccxtex.Ticker
   doctest Ccxtex
 
   test "returns exchanges list" do
@@ -43,7 +44,7 @@ defmodule Ccxtex.NextTest do
     base = "ETH"
     quote = "USD"
     {:ok, ticker} = fetch_ticker(exchange, base, quote)
-    assert %{"ask" => _, "bid" => _, "vwap" => _} = ticker
+    assert %Ticker{ask: _, bid: _, vwap: _} = ticker
   end
 
 
