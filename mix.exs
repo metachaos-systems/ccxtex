@@ -31,7 +31,8 @@ defmodule Ccxtex.MixProject do
       {:dialyxir, "~> 1.0.0-rc.2", only: [:dev], runtime: false},
       {:nodejs, "~> 0.1"},
       {:jason, "~> 1.1"},
-      {:construct, "~> 1.0"}
+      {:construct, "~> 1.0"},
+      {:map_keys, "~> 0.1"}
     ]
   end
 end

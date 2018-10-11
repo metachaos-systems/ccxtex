@@ -47,7 +47,10 @@ defmodule Ccxtex.Next do
       symbol: base <> "/" <> quote
     }
     with {:ok, ticker} <- NodeJS.call(js_fn, [opts]) do
-      ticker = Ticker.make(ticker)
+      ticker =
+        ticker
+        |> MapKeys.to_snake_case()
+        |> Ticker.make!()
       {:ok, ticker}
     else
       err_tup -> err_tup
