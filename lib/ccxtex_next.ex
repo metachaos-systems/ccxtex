@@ -56,4 +56,16 @@ defmodule Ccxtex.Next do
       err_tup -> err_tup
     end
   end
+
+  @spec fetch_markets(String.t) :: {:ok, any} | {:error, String.t()}
+  def fetch_markets(exchange) do
+    js_fn = {"main.js", :fetchMarkets}
+
+    with {:ok, markets} <- NodeJS.call(js_fn, [exchange]) do
+      {:ok, markets}
+    else
+      err_tup -> err_tup
+    end
+
+  end
 end

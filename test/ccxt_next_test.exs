@@ -47,5 +47,23 @@ defmodule Ccxtex.NextTest do
     assert %Ticker{ask: _, bid: _, vwap: _} = ticker
   end
 
+  test "fetch markets for bitstamp" do
+    exchange = "bitstamp"
+    {:ok, markets} = fetch_markets(exchange)
+    assert %{
+                "active" => _,
+                "base" => _,
+                "baseId" => _,
+                "id" => _,
+                "info" => _,
+                "limits" => _,                
+                "precision" => _,
+                "quote" => _,
+                "quoteId" => _,
+                "symbol" => _,
+                "symbolId" => _,
+              } = hd(markets)
+  end
+
 
 end
