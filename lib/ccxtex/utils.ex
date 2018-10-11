@@ -2,7 +2,7 @@ defmodule Ccxtex.Utils do
   def parse_ohlcvs(raw_ohlcvs) do
     for [unix_time_ms, open, high, low, close, volume] <- raw_ohlcvs do
       %{
-        timestamp: unix_time_ms |> DateTime.from_unix!(:millisecond) |> DateTime.to_naive(),
+        timestamp: unix_time_ms,
         open: parse_float(open),
         high: parse_float(high),
         low: parse_float(low),

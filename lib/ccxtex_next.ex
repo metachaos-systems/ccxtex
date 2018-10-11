@@ -1,6 +1,6 @@
 defmodule Ccxtex.Next do
   alias Ccxtex.OHLCVS.Opts
-  alias Ccxtex.{Ticker, Utils, OHLCV}
+  alias Ccxtex.{Ticker, Utils, OHLCV, Market}
 
   @spec exchanges() :: [String.t()]
   def exchanges() do
@@ -17,11 +17,12 @@ defmodule Ccxtex.Next do
   def fetch_ohlcvs(%Ccxtex.OHLCVS.Opts{} = opts) do
     js_fn = {"main.js", :fetchOhlcvs}
 
-    since_unix = if opts.since do
-      opts.since
-      |> DateTime.from_naive!("Etc/UTC")
-      |> DateTime.to_unix(:millisecond)
-    end
+    since_unix =
+      if opts.since do
+        opts.since
+        |> DateTime.from_naive!("Etc/UTC")
+        |> DateTime.to_unix(:millisecond)
+      end
 
     opts =
       opts
@@ -29,16 +30,18 @@ defmodule Ccxtex.Next do
       |> Map.put(:since, since_unix)
 
     with {:ok, ohlcvs} <- NodeJS.call(js_fn, [opts]) do
-      ohlcvs = ohlcvs
-      |> Utils.parse_ohlcvs()
-      |> Enum.map(&OHLCV.make!/1)
+      ohlcvs =
+        ohlcvs
+        |> Utils.parse_ohlcvs()
+        |> Enum.map(&OHLCV.make!/1)
+
       {:ok, ohlcvs}
     else
       err_tup -> err_tup
     end
   end
 
-  @spec fetch_ticker(String.t, String.t, String.t) :: {:ok, any} | {:error, String.t()}
+  @spec fetch_ticker(String.t(), String.t(), String.t()) :: {:ok, any} | {:error, String.t()}
   def fetch_ticker(exchange, base, quote) do
     js_fn = {"main.js", :fetchTicker}
 
@@ -46,26 +49,30 @@ defmodule Ccxtex.Next do
       exchange: exchange,
       symbol: base <> "/" <> quote
     }
+
     with {:ok, ticker} <- NodeJS.call(js_fn, [opts]) do
       ticker =
         ticker
         |> MapKeys.to_snake_case()
         |> Ticker.make!()
+
       {:ok, ticker}
     else
       err_tup -> err_tup
     end
   end
 
-  @spec fetch_markets(String.t) :: {:ok, any} | {:error, String.t()}
+  @spec fetch_markets(String.t()) :: {:ok, any} | {:error, String.t()}
   def fetch_markets(exchange) do
     js_fn = {"main.js", :fetchMarkets}
 
     with {:ok, markets} <- NodeJS.call(js_fn, [exchange]) do
+      markets = markets
+        |> Enum.map(&MapKeys.to_snake_case/1)
+        |> Enum.map(&Market.make!/1)
       {:ok, markets}
     else
       err_tup -> err_tup
     end
-
   end
 end

@@ -1,7 +1,7 @@
 defmodule Ccxtex.NextTest do
   import Ccxtex.Next
   use ExUnit.Case, async: true
-  alias Ccxtex.{Ticker, OHLCV}
+  alias Ccxtex.{Ticker, OHLCV, Market}
   doctest Ccxtex
 
   test "returns exchanges list" do
@@ -50,20 +50,19 @@ defmodule Ccxtex.NextTest do
   test "fetch markets for bitstamp" do
     exchange = "bitstamp"
     {:ok, markets} = fetch_markets(exchange)
-    assert %{
-                "active" => _,
-                "base" => _,
-                "baseId" => _,
-                "id" => _,
-                "info" => _,
-                "limits" => _,                
-                "precision" => _,
-                "quote" => _,
-                "quoteId" => _,
-                "symbol" => _,
-                "symbolId" => _,
-              } = hd(markets)
+
+    assert %Market{
+             active: _,
+             base: _,
+             base_id: _,
+             id: _,
+             info: _,
+             limits: _,
+             precision: _,
+             quote: _,
+             quote_id: _,
+             symbol: _,
+             symbol_id: _
+           } = hd(markets)
   end
-
-
 end

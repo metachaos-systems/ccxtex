@@ -9,5 +9,4 @@ defmodule Ccxtex.OHLCVS.Opts do
     field :since, :naive_datetime, default: nil
     field :limit, :integer, default: nil
   end
-
 end
