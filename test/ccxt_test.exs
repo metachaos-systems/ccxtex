@@ -1,5 +1,5 @@
-defmodule Ccxtex.NextTest do
-  import Ccxtex.Next
+defmodule Ccxtex.Test do
+  import Ccxtex
   use ExUnit.Case, async: true
   alias Ccxtex.{Ticker, OHLCV, Market}
   doctest Ccxtex

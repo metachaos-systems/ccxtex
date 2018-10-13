@@ -9,8 +9,6 @@ defmodule Ccxtex.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      {Ccxtex.Port, [Ccxtex.Port]},
-      {Ccxtex.ExchangeSupervisor, []},
       supervisor(NodeJS, [[path: @js_path, pool_size: 4]])
     ]
 

@@ -1,5 +1,6 @@
 defmodule Ccxtex do
-  use Export.Python
+  alias Ccxtex.OHLCVS.Opts
+  alias Ccxtex.{Ticker, Utils, OHLCV, Market}
 
   @moduledoc """
   Ccxtex main module
@@ -8,7 +9,7 @@ defmodule Ccxtex do
   @doc """
   Usage example:
 
-  `exchanges = fetch_exchanges(@pid)`
+  `exchanges = exchanges()`
 
 
   Return value example:
@@ -55,14 +56,74 @@ defmodule Ccxtex do
   ]
   ```
   """
-  @spec fetch_exchanges() :: {:ok, map} | {:error, any}
-  def fetch_exchanges() do
-    call_default(Ccxtex.Port, "fetch_exchanges")
+  @spec exchanges() :: [String.t()]
+  def exchanges() do
+    js_fn = {"main.js", :exchanges}
+
+    with {:ok, exchanges} <- NodeJS.call(js_fn, []) do
+      {:ok, exchanges}
+    else
+      err_tup -> err_tup
+    end
   end
 
-  @spec fetch_markets_for_exchange(String.t()) :: {:ok, map} | {:error, any}
-  def fetch_markets_for_exchange(exchange) do
-    call_default(exchange, "fetch_markets_for_exchange", [exchange])
+  @doc """
+  Usage:
+
+  ```
+  opts =
+    Ccxtex.OHLCVS.Opts.make!(%{
+      exchange: "poloniex",
+      base: "ETH",
+      quote: "USDT",
+      timeframe: "1h",
+      since: ~N[2018-01-01T00:00:00],
+      limit: 100
+    })
+  ohlcvs = fetch_ohlcvs(opts)
+  ```
+
+  Return value example:
+  ```
+  %Ccxtex.OHLCV{
+  base: "ETH",
+  base_volume: 4234.62695691,
+  close: 731.16,
+  exchange: "bitfinex2",
+  high: 737.07,
+  low: 726,
+  open: 736.77,
+  quote: "USDT",
+  timestamp: ~N[2018-01-01 00:00:00.000]
+  }
+  ```
+  """
+  @spec fetch_ohlcvs(OHLCVS.Opts.t()) :: {:ok, any} | {:error, String.t()}
+  def fetch_ohlcvs(%Ccxtex.OHLCVS.Opts{} = opts) do
+    js_fn = {"main.js", :fetchOhlcvs}
+
+    since_unix =
+      if opts.since do
+        opts.since
+        |> DateTime.from_naive!("Etc/UTC")
+        |> DateTime.to_unix(:millisecond)
+      end
+
+    opts =
+      opts
+      |> Map.from_struct()
+      |> Map.put(:since, since_unix)
+
+    with {:ok, ohlcvs} <- NodeJS.call(js_fn, [opts]) do
+      ohlcvs =
+        ohlcvs
+        |> Utils.parse_ohlcvs()
+        |> Enum.map(&OHLCV.make!/1)
+
+      {:ok, ohlcvs}
+    else
+      err_tup -> err_tup
+    end
   end
 
   @doc """
@@ -70,13 +131,14 @@ defmodule Ccxtex do
 
   ```
   exchange = "bitstamp"
-  pair_symbol = "ETH/USD"
-  ticker = fetch_ticker(@pid, exchange, pair_symbol)
+  base = "ETH"
+  quote = "USD"
+  ticker = fetch_ticker(exchange, base, quote)
   ```
 
   Return value example:
   ```
-  %{
+  %Ccxtex.Ticker{
   ask: 577.35,
   ask_volume: nil,
   average: nil,
@@ -110,105 +172,40 @@ defmodule Ccxtex do
   }
   ```
   """
-  @spec fetch_ticker(String.t(), String.t()) :: {:ok, map} | {:error, any}
-  def fetch_ticker(exchange, pair_symbol) do
-    call_default(exchange, "fetch_ticker", [exchange, pair_symbol])
-  end
+  @spec fetch_ticker(String.t(), String.t(), String.t()) :: {:ok, any} | {:error, String.t()}
+  def fetch_ticker(exchange, base, quote) do
+    js_fn = {"main.js", :fetchTicker}
 
-  @doc """
-  Usage:
+    opts = %{
+      exchange: exchange,
+      symbol: base <> "/" <> quote
+    }
 
-  ```
-  exchange = "bitfinex2"
-  pair_symbol = "ETH/USDT"
-  timeframe = "1h"
-  since = ~N[2018-01-01T00:00:00]
-  limit = 1000
-  ohlcvs = fetch_ohlcvs(@pid, exchange, pair_symbol, timeframe, since, limit)
-  ```
+    with {:ok, ticker} <- NodeJS.call(js_fn, [opts]) do
+      ticker =
+        ticker
+        |> MapKeys.to_snake_case()
+        |> Ticker.make!()
 
-  Return value example:
-  ```
-  %{
-  base: "ETH",
-  base_volume: 4234.62695691,
-  close: 731.16,
-  exchange: "bitfinex2",
-  high: 737.07,
-  low: 726,
-  open: 736.77,
-  quote: "USDT",
-  timestamp: ~N[2018-01-01 00:00:00.000]
-  }
-  ```
-  """
-  @spec fetch_ohlcvs(String.t(), String.t(), String.t(), NaiveDateTime.t()) ::
-          {:ok, [map]} | {:error, any}
-  def fetch_ohlcvs(exchange, pair_symbol, timeframe, since \\ nil, limit \\ nil) do
-    [base, quote] = String.split(pair_symbol, "/")
-
-    since =
-      if since do
-        since
-        |> DateTime.from_naive!("Etc/UTC")
-        |> DateTime.to_unix(:millisecond)
-      else
-        since
-      end
-
-    with {:ok, res} <-
-           call_default(exchange, "fetch_ohlcv", [exchange, pair_symbol, timeframe, since, limit]) do
-      ohlcvs =
-        res
-        |> parse_ohlcvs()
-        |> Enum.map(&Map.merge(&1, %{base: base, quote: quote, exchange: exchange}))
-
-      {:ok, ohlcvs}
+      {:ok, ticker}
     else
-      err -> err
+      err_tup -> err_tup
     end
   end
 
-  defp parse_ohlcvs(raw_ohlcvs) do
-    for [unix_time_ms, open, high, low, close, volume] <- raw_ohlcvs do
-      %{
-        timestamp: unix_time_ms |> DateTime.from_unix!(:millisecond) |> DateTime.to_naive(),
-        open: parse_float(open),
-        high: parse_float(high),
-        low: parse_float(low),
-        close: parse_float(close),
-        base_volume: parse_float(volume)
-      }
+  @spec fetch_markets(String.t()) :: {:ok, any} | {:error, String.t()}
+  def fetch_markets(exchange) do
+    js_fn = {"main.js", :fetchMarkets}
+
+    with {:ok, markets} <- NodeJS.call(js_fn, [exchange]) do
+      markets =
+        markets
+        |> Enum.map(&MapKeys.to_snake_case/1)
+        |> Enum.map(&Market.make!/1)
+
+      {:ok, markets}
+    else
+      err_tup -> err_tup
     end
   end
-
-  defp call_default(exchange, fn_name, args \\ []) do
-    try do
-      process_name =
-        case exchange do
-          Ccxtex.Port -> Ccxtex.Port
-          _ -> String.to_atom("ccxt_exchange_#{exchange}")
-        end
-
-      res = Python.call(process_name, "ccxt_port", fn_name, args)
-      data = Poison.Parser.parse!(res)
-      data = convert_keys_to_atoms(data)
-      {:ok, data}
-    rescue
-      e -> {:error, e}
-    end
-  end
-
-  defp convert_keys_to_atoms(x) do
-    AtomicMap.convert(x, %{safe: false})
-  end
-
-  defp parse_float(term) when is_binary(term) do
-    {float, _} = Float.parse(term)
-    float
-  end
-
-  defp parse_float(term) when is_float(term), do: term
-  defp parse_float(term) when is_integer(term), do: term
-  defp parse_float(nil), do: nil
 end
