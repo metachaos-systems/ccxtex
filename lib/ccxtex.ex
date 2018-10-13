@@ -58,9 +58,7 @@ defmodule Ccxtex do
   """
   @spec exchanges() :: [String.t()]
   def exchanges() do
-    js_fn = {"main.js", :exchanges}
-
-    with {:ok, exchanges} <- NodeJS.call(js_fn, []) do
+    with {:ok, exchanges} <- call_js_main(:exchanges, []) do
       {:ok, exchanges}
     else
       err_tup -> err_tup
@@ -100,8 +98,6 @@ defmodule Ccxtex do
   """
   @spec fetch_ohlcvs(OHLCVS.Opts.t()) :: {:ok, any} | {:error, String.t()}
   def fetch_ohlcvs(%Ccxtex.OHLCVS.Opts{} = opts) do
-    js_fn = {"main.js", :fetchOhlcvs}
-
     since_unix =
       if opts.since do
         opts.since
@@ -114,7 +110,7 @@ defmodule Ccxtex do
       |> Map.from_struct()
       |> Map.put(:since, since_unix)
 
-    with {:ok, ohlcvs} <- NodeJS.call(js_fn, [opts]) do
+    with {:ok, ohlcvs} <- call_js_main(:fetchOhlcvs, [opts]) do
       ohlcvs =
         ohlcvs
         |> Utils.parse_ohlcvs()
@@ -174,14 +170,12 @@ defmodule Ccxtex do
   """
   @spec fetch_ticker(String.t(), String.t(), String.t()) :: {:ok, any} | {:error, String.t()}
   def fetch_ticker(exchange, base, quote) do
-    js_fn = {"main.js", :fetchTicker}
-
     opts = %{
       exchange: exchange,
       symbol: base <> "/" <> quote
     }
 
-    with {:ok, ticker} <- NodeJS.call(js_fn, [opts]) do
+    with {:ok, ticker} <- call_js_main(:fetchTicker, [opts]) do
       ticker =
         ticker
         |> MapKeys.to_snake_case()
@@ -195,9 +189,7 @@ defmodule Ccxtex do
 
   @spec fetch_markets(String.t()) :: {:ok, any} | {:error, String.t()}
   def fetch_markets(exchange) do
-    js_fn = {"main.js", :fetchMarkets}
-
-    with {:ok, markets} <- NodeJS.call(js_fn, [exchange]) do
+    with {:ok, markets} <- call_js_main(:fetchMarkets, [exchange]) do
       markets =
         markets
         |> Enum.map(&MapKeys.to_snake_case/1)
@@ -207,5 +199,9 @@ defmodule Ccxtex do
     else
       err_tup -> err_tup
     end
+  end
+
+  def call_js_main(jsfn, args) do
+    NodeJS.call({"main.js", jsfn}, args)
   end
 end
