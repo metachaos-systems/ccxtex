@@ -98,7 +98,7 @@ defmodule Ccxtex do
   }
   ```
   """
-  @spec fetch_ohlcvs(OHLCVS.Opts.t()) :: err_tup
+  @spec fetch_ohlcvs(OHLCVS.Opts.t()) :: result_tuple
   def fetch_ohlcvs(%Ccxtex.OHLCVS.Opts{} = opts) do
     since_unix =
       if opts.since do
@@ -170,7 +170,7 @@ defmodule Ccxtex do
   }
   ```
   """
-  @spec fetch_ticker(String.t(), String.t(), String.t()) :: err_tup
+  @spec fetch_ticker(String.t(), String.t(), String.t()) :: result_tuple
   def fetch_ticker(exchange, base, quote) do
     opts = %{
       exchange: exchange,
@@ -184,6 +184,22 @@ defmodule Ccxtex do
         |> Ticker.make!()
 
       {:ok, ticker}
+    else
+      err_tup -> err_tup
+    end
+  end
+
+  @spec fetch_tickers([String.t()], map) :: result_tuple
+  def fetch_tickers(symbols \\ nil, params \\ nil) do
+    with {:ok, tickers} <- call_js_main(:fetchTickers, [symbols, params]) do
+      tickers =
+        tickers
+        |> Enum.map(fn {k, v} -> {k, Map.put(v, "symbol", k)} end)
+        |> Enum.map(fn {k, v} -> {k, MapKeys.to_snake_case(v)} end)
+        |> Enum.map(fn {k, v} -> {k, Ticker.make!(v)} end)
+        |> Enum.into(Map.new())
+
+      {:ok, tickers}
     else
       err_tup -> err_tup
     end

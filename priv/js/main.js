@@ -20,6 +20,11 @@ async function fetchTicker({exchange, symbol}) {
   return await _exchange.fetchTicker(symbol)
 }
 
+async function fetchTickers(exchange, symbols, params) {
+  const _exchange = new ccxt[exchange]()
+  return await _exchange.fetchTickers(symbols, params)
+}
+
 async function fetchMarkets(exchange) {
   const _exchange = new ccxt[exchange]()
   return await _exchange.fetchMarkets()
@@ -37,5 +42,6 @@ module.exports = {
   fetchMarketsForExchange,
   fetchOhlcvs,
   fetchTicker,
+  fetchTickers,
   fetchMarkets
 }

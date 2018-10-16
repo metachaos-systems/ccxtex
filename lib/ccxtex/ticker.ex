@@ -13,7 +13,7 @@ defmodule Ccxtex.Ticker do
     field :base_volume, :float
     field :quote_volume, :float
     field :symbol, :string
-    field :vwap, :float
+    field :vwap, :float, default: nil
     field :datetime, :naive_datetime
     field :timestamp, :integer
   end

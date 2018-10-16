@@ -47,6 +47,17 @@ defmodule Ccxtex.Test do
     assert %Ticker{ask: _, bid: _, vwap: _} = ticker
   end
 
+  test "fetchTickers fails for bitstamp: not implemented" do
+    exchange = "bitstamp"
+    assert {:error, _reason} = fetch_tickers(exchange)
+  end
+
+  test "fetchTickers succeeds for poloniex" do
+    exchange = "poloniex"
+    {:ok, tickers} = fetch_tickers(exchange)
+    assert %Ticker{high: _, low: _} = Map.get(tickers, "BTC/USDT")
+  end
+
   test "fetch markets for bitstamp" do
     exchange = "bitstamp"
     {:ok, markets} = fetch_markets(exchange)
