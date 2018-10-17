@@ -201,7 +201,7 @@ defmodule Ccxtex do
 
       {:ok, tickers}
     else
-      err_tup -> err_tup
+      err_tup -> process_error(err_tup)
     end
   end
 
@@ -221,5 +221,16 @@ defmodule Ccxtex do
 
   def call_js_main(jsfn, args) do
     NodeJS.call({"main.js", jsfn}, args)
+  end
+
+  @spec process_error({atom, String.t()}) :: {atom, String.t()}
+  def process_error(errtup = {:error, reason}) do
+    cond do
+      String.contains?(reason, "fetchTickers not supported") ->
+        {:error, "fetchTickers not supported"}
+
+      true ->
+        errtup
+    end
   end
 end
