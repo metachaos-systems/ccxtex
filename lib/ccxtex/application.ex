@@ -1,8 +1,6 @@
 defmodule Ccxtex.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
-  @js_path System.cwd!() <> "/priv/js"
+  @js_path System.cwd!() <> "/priv/js/dist"
   use Application
   import Supervisor.Spec
 
