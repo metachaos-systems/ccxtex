@@ -304,8 +304,8 @@ defmodule Ccxtex do
     end
   end
 
-  defp call_js_main(jsfn, args) do
-    NodeJS.call({"main.js", jsfn}, args)
+  def call_js_main(jsfn, args) do
+    NodeJS.call({"exec.js", jsfn}, args)
   end
 
   @spec process_error({:error, String.t()}) :: {:error, String.t()}

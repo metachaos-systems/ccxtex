@@ -12,7 +12,6 @@ async function fetchOhlcvs({exchange, base, quote, period, since, limit }) {
   const symbol = `${base}/${quote}`
   const _exchange = new ccxt[exchange]()
   return await _exchange.fetchOHLCV(symbol, period, since, limit)
-
 }
 
 async function fetchTicker({exchange, symbol}) {
