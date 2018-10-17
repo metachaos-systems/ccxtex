@@ -28,7 +28,8 @@ defmodule Ccxtex.MixProject do
       {:nodejs, "~> 0.1"},
       {:jason, "~> 1.1"},
       {:construct, "~> 1.0"},
-      {:map_keys, "~> 0.1"}
+      {:map_keys, "~> 0.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 

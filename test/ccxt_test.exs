@@ -49,7 +49,7 @@ defmodule Ccxtex.Test do
 
   test "fetchTickers fails for bitstamp: not implemented" do
     exchange = "bitstamp"
-    assert {:error, _reason} = fetch_tickers(exchange)
+    assert {:error, reason} = fetch_tickers(exchange)
   end
 
   test "fetchTickers succeeds for poloniex" do

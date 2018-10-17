@@ -304,7 +304,7 @@ defmodule Ccxtex do
     end
   end
 
-  def call_js_main(jsfn, args) do
+  defp call_js_main(jsfn, args) do
     NodeJS.call({"main.js", jsfn}, args)
   end
 
