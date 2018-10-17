@@ -28,3 +28,4 @@ ccxtex-*.tar
 /priv/python/*.pyc
 
 /priv/js/node_modules/
+/priv/js/dist/
