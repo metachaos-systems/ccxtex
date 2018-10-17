@@ -1,7 +1,5 @@
 defmodule Ccxtex.Ticker do
-  use Construct
-
-  structure do
+  use Construct do
     field :info, :map
     field :ask, :float
     field :bid, :float

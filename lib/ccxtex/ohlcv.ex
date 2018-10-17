@@ -1,7 +1,5 @@
 defmodule Ccxtex.OHLCV do
-  use Construct
-
-  structure do
+  use Construct do
     field :open, :float
     field :close, :float
     field :high, :float

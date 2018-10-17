@@ -1,7 +1,5 @@
 defmodule Ccxtex.OHLCVS.Opts do
-  use Construct
-
-  structure do
+  use Construct do
     field :exchange, :string
     field :base, :string
     field :quote, :string

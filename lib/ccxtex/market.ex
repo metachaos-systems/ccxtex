@@ -1,7 +1,6 @@
 defmodule Ccxtex.Market do
-  use Construct
 
-  structure do
+  use Construct do
     field :active, :boolean
     field :base, :string
     field :base_id, :string
