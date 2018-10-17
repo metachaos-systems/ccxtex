@@ -7,7 +7,8 @@ defmodule Ccxtex.MixProject do
       version: "0.2.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -22,14 +23,27 @@ defmodule Ccxtex.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:export, ">= 0.0.0"},
       {:dialyxir, "~> 1.0.0-rc.2", only: [:dev], runtime: false},
       {:nodejs, "~> 0.1"},
       {:jason, "~> 1.1"},
       {:construct, "~> 1.0"},
       {:map_keys, "~> 0.1"}
+    ]
+  end
+
+  defp package do
+    [
+      name: :ccxtex,
+      files: ["lib", "mix.exs", "README*", "LICENSE*", "priv/js/dist"],
+      description: "Call ccxt library for cryptocurrency markets from Elixir/Erlang",
+      maintainers: ["ontofractal"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/metachaos-systems/ccxtex",
+        "Metachaos Systems" => "http://metachaos.systems",
+        "Ccxt" => "https://github.com/ccxt/ccxt"
+      }
     ]
   end
 end
