@@ -68,7 +68,7 @@ defmodule Ccxtex do
   end
 
   @doc """
-  Usage:
+  Fetches a list of ohlcv data, takes OHLCVS.Opts argument
 
   ```
   opts =
@@ -125,7 +125,7 @@ defmodule Ccxtex do
   end
 
   @doc """
-  Usage:
+  Fetches ticker for a given exchange, base and quote symbols
 
   ```
   exchange = "bitstamp"
@@ -189,6 +189,55 @@ defmodule Ccxtex do
     end
   end
 
+  @doc """
+  Fetches all or some tickers for a given exchange
+
+  Usage:
+  ```
+  exchange = "poloniex"
+  ticker = fetch_tickers(exchange)
+  ```
+
+  Return value example:
+  ```
+  [
+  ...
+  %Ccxtex.Ticker{
+  ask: 577.35,
+  ask_volume: nil,
+  average: nil,
+  base_volume: 73309.52075575,
+  bid: 576.8,
+  bid_volume: nil,
+  change: nil,
+  close: 577.35,
+  datetime: "2018-05-24T14:06:09.000Z",
+  high: 619.95,
+  info: %{
+    ask: "577.35",
+    bid: "576.80",
+    high: "619.95",
+    last: "577.35",
+    low: "549.28",
+    open: "578.40",
+    timestamp: "1527170769",
+    volume: "73309.52075575",
+    vwap: "582.86"
+  },
+  last: 577.35,
+  low: 549.28,
+  open: 578.4,
+  percentage: nil,
+  previous_close: nil,
+  quote_volume: 42729187.26769644,
+  pair_symbol: "ETH/USD",
+  timestamp: 1527170769000,
+  vwap: 582.86
+  }
+  ...
+  ]
+  ```
+  """
   @spec fetch_tickers([String.t()], map) :: result_tuple
   def fetch_tickers(symbols \\ nil, params \\ nil) do
     with {:ok, tickers} <- call_js_main(:fetchTickers, [symbols, params]) do
@@ -205,6 +254,42 @@ defmodule Ccxtex do
     end
   end
 
+  @doc """
+  Fetches markets for a given exchange
+
+  Response example
+  ```
+  [
+  ...
+  %Ccxtex.Market{
+    active: true,
+    base: "ETH",
+    base_id: "eth",
+    id: "etheur",
+    info: %{
+      "base_decimals" => 8,
+      "counter_decimals" => 2,
+      "description" => "Ether / Euro",
+      "minimum_order" => "5.0 EUR",
+      "name" => "ETH/EUR",
+      "trading" => "Enabled",
+      "url_symbol" => "etheur"
+    },
+    limits: %{
+      "amount" => %{"min" => 1.0e-8},
+      "cost" => %{"min" => 5},
+      "price" => %{"min" => 0.01}
+    },
+    precision: %{"amount" => 8, "price" => 2},
+    quote: "EUR",
+    quote_id: "eur",
+    symbol: "ETH/EUR",
+    symbol_id: "eth_eur"
+  }
+  ...
+  ]
+  ```
+  """
   @spec fetch_markets(String.t()) :: result_tuple
   def fetch_markets(exchange) do
     with {:ok, markets} <- call_js_main(:fetchMarkets, [exchange]) do
@@ -223,8 +308,8 @@ defmodule Ccxtex do
     NodeJS.call({"main.js", jsfn}, args)
   end
 
-  @spec process_error({atom, String.t()}) :: {atom, String.t()}
-  def process_error(errtup = {:error, reason}) do
+  @spec process_error({:error, String.t()}) :: {:error, String.t()}
+  defp process_error(errtup = {:error, reason}) do
     cond do
       String.contains?(reason, "fetchTickers not supported") ->
         {:error, "fetchTickers not supported"}
