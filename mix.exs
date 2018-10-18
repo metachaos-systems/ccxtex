@@ -37,7 +37,7 @@ defmodule Ccxtex.MixProject do
     [
       name: :ccxtex,
       files: ["lib", "mix.exs", "README*", "LICENSE*", "priv/js/dist"],
-      description: "Call ccxt library for cryptocurrency markets from Elixir/Erlang",
+      description: "Call ccxt (cryptocurrency trading library) from Elixir/Erlang",
       maintainers: ["ontofractal"],
       licenses: ["MIT"],
       links: %{
