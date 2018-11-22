@@ -23,9 +23,8 @@ defmodule Ccxtex.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:export, ">= 0.0.0"},
-      {:dialyxir, "~> 1.0.0-rc.2", only: [:dev], runtime: false},
-      {:nodejs, "~> 0.1"},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
+      {:nodejs, "~> 1.0"},
       {:jason, "~> 1.1"},
       {:construct, "~> 1.0"},
       {:map_keys, "~> 0.1"},
