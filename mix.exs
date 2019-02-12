@@ -4,7 +4,7 @@ defmodule Ccxtex.MixProject do
   def project do
     [
       app: :ccxtex,
-      version: "0.3.1",
+      version: "0.3.2",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
