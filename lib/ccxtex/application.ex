@@ -1,14 +1,14 @@
 defmodule Ccxtex.Application do
   @moduledoc false
-  @js_path System.cwd!() <> "/priv/js/dist"
   use Application
   import Supervisor.Spec
 
   def start(_type, _args) do
     # List all child processes to be supervised
+    js_path = Application.app_dir(:ccxtex, "priv/js/dist")
 
     children = [
-      supervisor(NodeJS, [[path: @js_path, pool_size: 4]])
+      supervisor(NodeJS, [[path: js_path, pool_size: 4]])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -22,10 +22,7 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 ccxtex-*.tar
 
-/.elixir_ls
+/.elixir_ls/
 
-/priv/python/__pycache__
-/priv/python/*.pyc
-
-/priv/js/source/node_modules/
+/js/source/node_modules/
 /priv/js/dist/
