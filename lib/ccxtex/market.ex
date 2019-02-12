@@ -10,6 +10,6 @@ defmodule Ccxtex.Market do
     field :quote, :string
     field :quote_id, :string
     field :symbol, :string
-    field :symbol_id, :string
+    field :symbol_id, :string, default: nil
   end
 end
