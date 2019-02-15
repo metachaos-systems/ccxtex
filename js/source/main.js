@@ -8,10 +8,10 @@ async function fetchTrades({ exchange, base, quote, since }) {
 
 const exchanges = async () => ccxt.exchanges
 
-async function fetchOhlcvs({exchange, base, quote, period, since, limit }) {
+async function fetchOhlcvs({exchange, base, quote, timeframe, since, limit }) {
   const symbol = `${base}/${quote}`
   const _exchange = new ccxt[exchange]()
-  return await _exchange.fetchOHLCV(symbol, period, since, limit)
+  return await _exchange.fetchOHLCV(symbol, timeframe, since, limit)
 }
 
 async function fetchTicker({exchange, symbol}) {
