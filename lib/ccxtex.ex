@@ -2,8 +2,6 @@ defmodule Ccxtex do
   alias Ccxtex.OhlcvOpts
   alias Ccxtex.{Ticker, Utils, OHLCV, Market}
 
-  @type result_tuple :: {:ok, any} | {:error, String.t()}
-
   @moduledoc """
   Ccxtex main module
   """
@@ -98,7 +96,7 @@ defmodule Ccxtex do
   }
   ```
   """
-  @spec fetch_ohlcvs(OhlcvOpts.t()) :: result_tuple
+  @spec fetch_ohlcvs(OhlcvOpts.t()) :: {:ok, OHLCV.t()} | {:error, term}
   def fetch_ohlcvs(%OhlcvOpts{} = opts) do
     since_unix =
       if opts.since do
@@ -170,7 +168,7 @@ defmodule Ccxtex do
   }
   ```
   """
-  @spec fetch_ticker(String.t(), String.t(), String.t()) :: result_tuple
+  @spec fetch_ticker(String.t(), String.t(), String.t()) :: {:ok, Ticker.t()} | {:error, term}
   def fetch_ticker(exchange, base, quote) do
     opts = %{
       exchange: exchange,
@@ -241,7 +239,7 @@ defmodule Ccxtex do
   ]
   ```
   """
-  @spec fetch_tickers([String.t()], map) :: result_tuple
+  @spec fetch_tickers([String.t()], map) :: {:ok, list(Ticker.t())} | {:error, term}
   def fetch_tickers(symbols, params \\ %{}) do
     with {:ok, tickers} <- call_js_main(:fetchTickers, [symbols, params]) do
       tickers =
@@ -294,7 +292,7 @@ defmodule Ccxtex do
   ]
   ```
   """
-  @spec fetch_markets(String.t()) :: result_tuple
+  @spec fetch_markets(String.t()) :: {:ok, list(Market.t())} | {:error, term}
   def fetch_markets(exchange) do
     with {:ok, markets} <- call_js_main(:fetchMarkets, [exchange]) do
       markets =
