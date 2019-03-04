@@ -4,36 +4,34 @@ defmodule Ccxtex.Test do
   alias Ccxtex.{Ticker, OHLCV, Market, OhlcvOpts}
   doctest Ccxtex
 
+  @default_ohlcv_opts %OhlcvOpts{
+    exchange: "binance",
+    base: "BTC",
+    quote: "USDT",
+    timeframe: "1m",
+    since: ~N[2018-01-01T00:00:00],
+    limit: 100
+  }
+
   test "returns exchanges list" do
     {:ok, exchanges} = exchanges()
     assert "poloniex" in exchanges and "bitfinex" in exchanges
   end
 
   test "fetches ohlcvs from poloniex" do
-    opts = %OhlcvOpts{
-      exchange: "binance",
-      base: "BTC",
-      quote: "USDT",
-      timeframe: "1m",
-      since: ~N[2018-01-01T00:00:00],
-      limit: 1000
-    }
+    {:ok, ohlcvs} = fetch_ohlcvs(%{@default_ohlcv_opts | exchange: "poloniex", timeframe: "5m"})
+    assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} = hd(ohlcvs)
+  end
 
+  test "fetches ohlcvs from okex" do
+    # okex fetchOHLCV counts "limit" candles from current time backwards, therefore the "limit" argument for okex is disabled.
+    opts = %{@default_ohlcv_opts | exchange: "okex"} |> Map.drop([:limit])
     {:ok, ohlcvs} = fetch_ohlcvs(opts)
     assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} = hd(ohlcvs)
   end
 
   test "fetches ohlcvs from bitfinex2" do
-    opts = %OhlcvOpts{
-      exchange: "bitfinex2",
-      base: "ETH",
-      quote: "USD",
-      timeframe: "1h",
-      since: ~N[2018-01-01T00:00:00],
-      limit: 100
-    }
-
-    {:ok, ohlcvs} = fetch_ohlcvs(opts)
+    {:ok, ohlcvs} = fetch_ohlcvs(@default_ohlcv_opts)
 
     assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} =
              hd(tl(ohlcvs))
