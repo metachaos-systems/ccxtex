@@ -116,7 +116,7 @@ defmodule Ccxtex do
       ohlcvs =
         ohlcvs
         |> Utils.parse_ohlcvs()
-        |> Enum.map(&OHLCV.make!/1)
+        |> Enum.map(&struct!(OHLCV, &1))
 
       {:ok, ohlcvs}
     else
@@ -178,10 +178,12 @@ defmodule Ccxtex do
     }
 
     with {:ok, ticker} <- call_js_main(:fetchTicker, [opts]) do
+      to_struct = &struct!(Ticker, &1)
       ticker =
         ticker
         |> MapKeys.to_snake_case()
-        |> Ticker.make!()
+        |> MapKeys.to_atoms_unsafe!()
+        |> to_struct.()
 
       {:ok, ticker}
     else
@@ -245,7 +247,8 @@ defmodule Ccxtex do
         tickers
         |> Enum.map(fn {k, v} -> {k, Map.put(v, "symbol", k)} end)
         |> Enum.map(fn {k, v} -> {k, MapKeys.to_snake_case(v)} end)
-        |> Enum.map(fn {k, v} -> {k, Ticker.make!(v)} end)
+        |> Enum.map(fn {k, v} -> {k, MapKeys.to_atoms_unsafe!(v)} end)
+        |> Enum.map(fn {k, v} -> {k, struct!(Ticker, v)} end)
         |> Enum.into(Map.new())
 
       {:ok, tickers}
@@ -296,7 +299,8 @@ defmodule Ccxtex do
       markets =
         markets
         |> Enum.map(&MapKeys.to_snake_case/1)
-        |> Enum.map(&Market.make!/1)
+        |> Enum.map(&MapKeys.to_atoms_unsafe!/1)
+        |> Enum.map(&struct!(Market, &1))
 
       {:ok, markets}
     else
