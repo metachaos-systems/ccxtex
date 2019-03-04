@@ -1,5 +1,7 @@
 defmodule Ccxtex.Ticker do
-  use Construct do
+  use TypedStruct
+
+  typedstruct do
     field :info, :map
     field :ask, :float
     field :bid, :float
@@ -11,7 +13,7 @@ defmodule Ccxtex.Ticker do
     field :base_volume, :float
     field :quote_volume, :float
     field :symbol, :string
-    field :vwap, :float, default: nil
+    field :vwap, :float
     field :datetime, :naive_datetime
     field :timestamp, :integer
   end

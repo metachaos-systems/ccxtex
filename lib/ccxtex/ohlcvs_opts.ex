@@ -1,5 +1,7 @@
 defmodule Ccxtex.OHLCVS.Opts do
-  use Construct do
+  use TypedStruct
+  
+  typedstruct do
     field :exchange, :string
     field :base, :string
     field :quote, :string

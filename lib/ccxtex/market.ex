@@ -1,5 +1,7 @@
 defmodule Ccxtex.Market do
-  use Construct do
+  use TypedStruct
+
+  typedstruct do
     field :active, :boolean
     field :base, :string
     field :base_id, :string
@@ -10,6 +12,6 @@ defmodule Ccxtex.Market do
     field :quote, :string
     field :quote_id, :string
     field :symbol, :string
-    field :symbol_id, :string, default: nil
+    field :symbol_id, :string
   end
 end

@@ -1,5 +1,7 @@
 defmodule Ccxtex.OHLCV do
-  use Construct do
+  use TypedStruct
+
+  typedstruct do
     field :open, :float
     field :close, :float
     field :high, :float
@@ -7,4 +9,5 @@ defmodule Ccxtex.OHLCV do
     field :base_volume, :float
     field :timestamp, :integer
   end
+
 end
