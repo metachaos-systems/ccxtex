@@ -240,8 +240,8 @@ defmodule Ccxtex do
   ```
   """
   @spec fetch_tickers(String.t(), map) :: {:ok, list(Ticker.t())} | {:error, term}
-  def fetch_tickers(exchange, params \\ %{}) do
-    with {:ok, tickers} <- call_js_main(:fetchTickers, [exchange, params]) do
+  def fetch_tickers(exchange, _params \\ %{}) do
+    with {:ok, tickers} <- call_js_main(:fetchTickersAll, [exchange]) do
       tickers =
         tickers
         |> Enum.map(fn {k, v} -> {k, Map.put(v, "symbol", k)} end)
