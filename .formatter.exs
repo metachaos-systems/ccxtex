@@ -9,5 +9,6 @@ locals_without_parens = [
 
 [
   inputs: ["mix.exs", "{config,lib,test}/**/*.{ex,exs}"],
+  import_deps: [:typed_struct],
   locals_without_parens: locals_without_parens
 ]
