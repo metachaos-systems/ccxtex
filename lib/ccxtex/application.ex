@@ -8,7 +8,7 @@ defmodule Ccxtex.Application do
     js_path = Application.app_dir(:ccxtex, "priv/js/dist")
 
     children = [
-      supervisor(NodeJS, [[path: js_path, pool_size: 4]])
+      supervisor(NodeJS, [[path: js_path, pool_size: 16]])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
