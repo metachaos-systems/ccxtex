@@ -4,7 +4,7 @@ defmodule Ccxtex.MixProject do
   def project do
     [
       app: :ccxtex,
-      version: "0.3.4",
+      version: "0.4.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -36,7 +36,7 @@ defmodule Ccxtex.MixProject do
     [
       name: :ccxtex,
       files: ["lib", "mix.exs", "README*", "LICENSE*", "priv/js/dist"],
-      description: "Call ccxt (cryptocurrency trading library) from Elixir/Erlang",
+      description: "Use ccxt (cryptocurrency trading library) with Elixir",
       maintainers: ["ontofractal"],
       licenses: ["MIT"],
       links: %{
