@@ -1,7 +1,7 @@
 defmodule Ccxtex.Test do
   import Ccxtex
   use ExUnit.Case, async: true
-  alias Ccxtex.{Ticker, OHLCV, Market}
+  alias Ccxtex.{Ticker, OHLCV, Market, OhlcvOpts}
   doctest Ccxtex
 
   test "returns exchanges list" do
@@ -10,33 +10,33 @@ defmodule Ccxtex.Test do
   end
 
   test "fetches ohlcvs from poloniex" do
-    opts =
-      %Ccxtex.OHLCVS.Opts{
-        exchange: "binance",
-        base: "ETH",
-        quote: "USDT",
-        timeframe: "1m",
-        since: ~N[2018-01-01T00:00:00],
-        limit: 1000
-      }
+    opts = %OhlcvOpts{
+      exchange: "binance",
+      base: "BTC",
+      quote: "USDT",
+      timeframe: "1m",
+      since: ~N[2018-01-01T00:00:00],
+      limit: 1000
+    }
 
     {:ok, ohlcvs} = fetch_ohlcvs(opts)
     assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} = hd(ohlcvs)
   end
 
   test "fetches ohlcvs from bitfinex2" do
-    opts =
-      %Ccxtex.OHLCVS.Opts{
-        exchange: "bitfinex2",
-        base: "ETH",
-        quote: "USD",
-        timeframe: "1h",
-        since: ~N[2018-01-01T00:00:00],
-        limit: 100
-      }
+    opts = %OhlcvOpts{
+      exchange: "bitfinex2",
+      base: "ETH",
+      quote: "USD",
+      timeframe: "1h",
+      since: ~N[2018-01-01T00:00:00],
+      limit: 100
+    }
 
     {:ok, ohlcvs} = fetch_ohlcvs(opts)
-    assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} = hd(tl ohlcvs)
+
+    assert %OHLCV{open: _, close: _, high: _, low: _, base_volume: _, timestamp: _} =
+             hd(tl(ohlcvs))
   end
 
   test "fetch bitfinex ticker" do

@@ -1,4 +1,4 @@
-defmodule Ccxtex.OHLCVS.Opts do
+defmodule Ccxtex.OhlcvOpts do
   use TypedStruct
 
   typedstruct do

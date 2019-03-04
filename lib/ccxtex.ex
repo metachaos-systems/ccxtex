@@ -1,5 +1,5 @@
 defmodule Ccxtex do
-  alias Ccxtex.OHLCVS.Opts
+  alias Ccxtex.OhlcvOpts
   alias Ccxtex.{Ticker, Utils, OHLCV, Market}
 
   @type result_tuple :: {:ok, any} | {:error, String.t()}
@@ -98,8 +98,8 @@ defmodule Ccxtex do
   }
   ```
   """
-  @spec fetch_ohlcvs(OHLCVS.Opts.t()) :: result_tuple
-  def fetch_ohlcvs(%Ccxtex.OHLCVS.Opts{} = opts) do
+  @spec fetch_ohlcvs(OhlcvOpts.t()) :: result_tuple
+  def fetch_ohlcvs(%OhlcvOpts{} = opts) do
     since_unix =
       if opts.since do
         opts.since
@@ -179,6 +179,7 @@ defmodule Ccxtex do
 
     with {:ok, ticker} <- call_js_main(:fetchTicker, [opts]) do
       to_struct = &struct!(Ticker, &1)
+
       ticker =
         ticker
         |> MapKeys.to_snake_case()
@@ -241,7 +242,7 @@ defmodule Ccxtex do
   ```
   """
   @spec fetch_tickers([String.t()], map) :: result_tuple
-  def fetch_tickers(symbols \\ nil, params \\ nil) do
+  def fetch_tickers(symbols, params \\ %{}) do
     with {:ok, tickers} <- call_js_main(:fetchTickers, [symbols, params]) do
       tickers =
         tickers
