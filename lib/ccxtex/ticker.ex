@@ -10,6 +10,9 @@ defmodule Ccxtex.Ticker do
     field :high, :float
     field :low, :float
     field :last, :float
+    field :average, :float
+    field :change, :float
+    field :percentage, :float
     field :base_volume, :float
     field :quote_volume, :float
     field :symbol, :string
