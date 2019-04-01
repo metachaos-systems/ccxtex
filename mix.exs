@@ -42,6 +42,7 @@ defmodule Ccxtex.MixProject do
       links: %{
         "GitHub" => "https://github.com/metachaos-systems/ccxtex",
         "Metachaos Systems" => "http://metachaos.systems",
+        "ontofractal" => "http://ontofractal.com",
         "Ccxt" => "https://github.com/ccxt/ccxt"
       }
     ]
