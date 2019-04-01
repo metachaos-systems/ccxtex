@@ -56,6 +56,25 @@ defmodule Ccxtex.Test do
     assert %Ticker{high: _, low: _} = Map.get(tickers, "BTC/USDT")
   end
 
+  test "fetch markets for kraken" do
+    exchange = "kraken"
+    {:ok, markets} = fetch_markets(exchange)
+
+    assert %Market{
+             active: _,
+             base: _,
+             base_id: _,
+             id: _,
+             info: _,
+             limits: _,
+             precision: _,
+             quote: _,
+             quote_id: _,
+             symbol: _,
+             symbol_id: _
+           } = hd(markets)
+  end
+
   test "fetch markets for bitstamp" do
     exchange = "binance"
     {:ok, markets} = fetch_markets(exchange)
