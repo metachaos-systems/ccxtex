@@ -13,5 +13,9 @@ defmodule Ccxtex.Market do
     field :quote_id, String.t()
     field :symbol, String.t()
     field :symbol_id, String.t()
+    field :altname, String.t()
+    field :darkpool, boolean()
+    field :maker, float()
+    field :taker, float()
   end
 end
